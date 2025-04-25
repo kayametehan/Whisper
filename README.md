@@ -1,5 +1,5 @@
 # Whisper
-Realtime chat app
+Full stack Realtime chat app
 
 ```npm install express socket.io sqlite3 bcrypt jsonwebtoken multer cors```
 
