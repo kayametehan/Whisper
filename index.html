@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giriş ve Kayıt - Chat Uygulaması</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            font-family: 'Inter', sans-serif;
+            color: #e2e8f0;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .auth-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 2rem;
+            border-radius: 12px;
+        }
+        .auth-toggle {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+        .auth-toggle button {
+            flex: 1;
+            padding: 0.75rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #e2e8f0;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .auth-toggle button.active {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+        }
+        .auth-toggle button:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        input, button {
+            transition: all 0.2s ease;
+        }
+        input:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.3);
+        }
+        .hover-scale {
+            transition: transform 0.2s ease;
+        }
+        .hover-scale:hover {
+            transform: scale(1.02);
+        }
+        .profile-pic-preview {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 1rem auto;
+            display: none;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container glass-effect p-6" aria-label="Giriş ve Kayıt Formu">
+         
+        <div class="auth-toggle">
+            <button class="active" onclick="showLogin()">Giriş Yap</button>
+            <button onclick="showRegister()">Kayıt Ol</button>
+        </div>
+
+         
+        <div id="login-form" class="form-container" style="display: block; animation: slideIn 0.3s ease;">
+            <h2 class="text-2xl font-bold mb-6 text-center">Giriş Yap</h2>
+            <div class="mb-4">
+                <label for="login-email" class="block text-sm mb-2">E-posta</label>
+                <input type="email" id="login-email" placeholder="E-posta adresiniz" class="w-full bg-gray-800 border-gray-700 text-white p-3 rounded-lg focus:outline-none" aria-label="E-posta Girişi" required>
+            </div>
+            <div class="mb-6">
+                <label for="login-password" class="block text-sm mb-2">Şifre</label>
+                <input type="password" id="login-password" placeholder="Şifreniz" class="w-full bg-gray-800 border-gray-700 text-white p-3 rounded-lg focus:outline-none" aria-label="Şifre Girişi" required>
+            </div>
+            <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 w-full rounded-lg hover-scale" onclick="login()" aria-label="Giriş Yap">Giriş Yap</button>
+            <p class="text-sm text-gray-400 mt-4 text-center">Hesabınız yok mu? <span class="text-indigo-400 cursor-pointer" onclick="showRegister()">Kayıt Ol</span></p>
+        </div>
+
+         
+        <div id="register-form" class="form-container" style="display: none; animation: slideIn 0.3s ease;">
+            <h2 class="text-2xl font-bold mb-6 text-center">Kayıt Ol</h2>
+            <div class="mb-4">
+                <label for="register-username" class="block text-sm mb-2">Kullanıcı Adı</label>
+                <input type="text" id="register-username" placeholder="Kullanıcı adınız" class="w-full bg-gray-800 border-gray-700 text-white p-3 rounded-lg focus:outline-none" aria-label="Kullanıcı Adı Girişi" required>
+            </div>
+            <div class="mb-4">
+                <label for="register-email" class="block text-sm mb-2">E-posta</label>
+                <input type="email" id="register-email" placeholder="E-posta adresiniz" class="w-full bg-gray-800 border-gray-700 text-white p-3 rounded-lg focus:outline-none" aria-label="E-posta Girişi" required>
+            </div>
+            <div class="mb-4">
+                <label for="register-password" class="block text-sm mb-2">Şifre</label>
+                <input type="password" id="register-password" placeholder="Şifreniz" class="w-full bg-gray-800 border-gray-700 text-white p-3 rounded-lg focus:outline-none" aria-label="Şifre Girişi" required>
+            </div>
+            <div class="mb-6">
+                <label for="profile-pic" class="block text-sm mb-2">Profil Fotoğrafı</label>
+                <input type="file" id="profile-pic" accept="image/*" class="w-full bg-gray-800 border-gray-700 text-white p-3 rounded-lg" aria-label="Profil Fotoğrafı Yükleme">
+                <img id="profile-pic-preview" class="profile-pic-preview" alt="Profil Fotoğrafı Önizlemesi">
+            </div>
+            <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 w-full rounded-lg hover-scale" onclick="register()" aria-label="Kayıt Ol">Kayıt Ol</button>
+            <p class="text-sm text-gray-400 mt-4 text-center">Zaten hesabınız var mı? <span class="text-indigo-400 cursor-pointer" onclick="showLogin()">Giriş Yap</span></p>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://metax.tr/api';
+      
+
+        function showLogin() {
+          document.getElementById('login-form').style.display = 'block';
+          document.getElementById('register-form').style.display = 'none';
+          document.querySelectorAll('.auth-toggle button')[0].classList.add('active');
+          document.querySelectorAll('.auth-toggle button')[1].classList.remove('active');
+        }
+      
+        function showRegister() {
+          document.getElementById('login-form').style.display = 'none';
+          document.getElementById('register-form').style.display = 'block';
+          document.querySelectorAll('.auth-toggle button')[0].classList.remove('active');
+          document.querySelectorAll('.auth-toggle button')[1].classList.add('active');
+        }
+      
+
+        document.getElementById('profile-pic').addEventListener('change', function(e) {
+          const file = e.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+              const preview = document.getElementById('profile-pic-preview');
+              preview.src = e.target.result;
+              preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+      
+
+        async function login() {
+          const email = document.getElementById('login-email').value;
+          const password = document.getElementById('login-password').value;
+          if (!email || !password) {
+            alert('Lütfen tüm alanları doldurun.');
+            return;
+          }
+      
+          try {
+            const response = await fetch(`${API_URL}/login`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ email, password }),
+            });
+            const data = await response.json();
+            if (response.ok) {
+              localStorage.setItem('token', data.token);
+              alert('Giriş başarılı!');
+              window.location.href = '/chat.html'; 
+            } else {
+              alert(data.message);
+            }
+          } catch (error) {
+            console.error(error);
+            alert('Bir hata oluştu.');
+          }
+        }
+      
+
+        async function register() {
+          const username = document.getElementById('register-username').value;
+          const email = document.getElementById('register-email').value;
+          const password = document.getElementById('register-password').value;
+          const profilePic = document.getElementById('profile-pic').files[0];
+          if (!username || !email || !password) {
+            alert('Lütfen tüm alanları doldurun.');
+            return;
+          }
+      
+          const formData = new FormData();
+          formData.append('username', username);
+          formData.append('email', email);
+          formData.append('password', password);
+          if (profilePic) {
+            formData.append('profilePic', profilePic);
+          }
+      
+          try {
+            const response = await fetch(`${API_URL}/register`, {
+              method: 'POST',
+              body: formData,
+            });
+            const data = await response.json();
+            if (response.ok) {
+              localStorage.setItem('token', data.token);
+              alert('Kayıt başarılı!');
+              window.location.href = '/chat.html';
+            } else {
+              alert(data.message);
+            }
+          } catch (error) {
+            console.error(error);
+            alert('Bir hata oluştu.');
+          }
+      
+        }
+      
+
+        document.getElementById('login-form').addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') login();
+        });
+      
+
+        document.getElementById('register-form').addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') register();
+        });
+      </script>
+</body>
+</html>
